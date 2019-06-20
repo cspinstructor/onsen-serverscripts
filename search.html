@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <form>
+      <input type="text" placeholder="Enter name" id="myname" />
+      <br />
+      <input type="submit" value="Search" onclick="searchName()" />
+    </form>
+
+    <div id="resultlist"></div>
+
+    <script>
+      function searchName() {
+        var myname = document.getElementById("myname").value;
+        //http://hclab.orgfree.com/jsonencode.php?name=apple
+        var url = "http://hclab.orgfree.com/jsonencode.php?name=" + myname;
+
+        console.log(url);
+
+        $.ajax(url)
+
+          .done(function(data) {
+            var obj = JSON.parse(data);
+
+            console.log(data);
+
+            //console.log(obj[0].name);
+
+            var output = "<li>";
+
+            if (obj[0]) {
+              obj.forEach(function(record) {
+                console.log(record.name);
+
+                output += " Name: " + record.name + " email: " + record.email;
+              });
+              output += +"</li>";
+            } else {
+              output += "<li>Not Found</li>";
+            }
+
+            $("#resultlist").append(output);
+          })
+
+          .fail(function() {
+            $("#resultlist").html(myname + " not found!");
+          });
+      }
+    </script>
+  </body>
+</html>
